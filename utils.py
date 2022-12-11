@@ -60,6 +60,12 @@ def pts2ply(pts,colors,filename='out.ply'):
             f.write('{} {} {} {} {} {}\n'.format(pt[0],pt[1],pt[2],
                                                 cl[0],cl[1],cl[2]))
 
+def pts2npz(pts,filename='out.npz'):
+    """Saves an ndarray of 3D coordinates (in npz format)"""
+    with open(filename,'w') as f:
+        np.savez(filename, pts)
+
+
 def DrawCorrespondences(img, ptsTrue, ptsReproj, ax, drawOnly=50): 
     """
     Draws correspondence between ground truth and reprojected feature point

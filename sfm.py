@@ -32,11 +32,15 @@ class SFM(object):
         #setting up directory stuff..
         self.images_dir = os.path.join(opts.data_dir,opts.dataset, 'images')
         self.out_cloud_dir = os.path.join(opts.out_dir, opts.dataset, 'point-clouds')
+        self.out_npz_dir = os.path.join(opts.out_dir, opts.dataset, 'npz-point-clouds')
         self.out_err_dir = os.path.join(opts.out_dir, opts.dataset, 'errors')
 
         #output directories
         if not os.path.exists(self.out_cloud_dir): 
             os.makedirs(self.out_cloud_dir)
+
+        if not os.path.exists(self.out_npz_dir):
+            os.makedirs(self.out_npz_dir)
 
         if (opts.plot_error is True) and (not os.path.exists(self.out_err_dir)): 
             os.makedirs(self.out_err_dir)
@@ -349,6 +353,7 @@ class SFM(object):
 
         #3d point cloud generation and reprojection error evaluation
         self.ToPly(os.path.join(self.out_cloud_dir, 'cloud_{}_view.ply'.format(views_done)))
+        pts2npz(self.point_cloud, os.path.join(self.out_npz_dir, 'cloud_{}_view.npz'.format(views_done)))
 
         err1 = self._ComputeReprojectionError(name1)
         err2 = self._ComputeReprojectionError(name2)
@@ -378,6 +383,7 @@ class SFM(object):
             #3d point cloud update and error for new camera
             views_done += 1 
             self.ToPly(os.path.join(self.out_cloud_dir, 'cloud_{}_view.ply'.format(views_done)))
+            pts2npz(self.point_cloud, os.path.join(self.out_npz_dir, 'cloud_{}_view.npz'.format(views_done)))
 
             new_err = self._ComputeReprojectionError(new_name)
             errors.append(new_err)
@@ -449,7 +455,7 @@ if __name__=='__main__':
     curr_dir = os.getcwd()
     data_root = os.path.join(curr_dir, 'data')
     image_root_dirs = os.listdir(data_root)
-    image_root_dirs = ['fountain-P11']
+    #image_root_dirs = ['fountain-P11']
     for dr in image_root_dirs:
         print("Running sfm for " + str(dr))
         opts.dataset = dr
