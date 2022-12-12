@@ -1,5 +1,6 @@
 import cv2
 import os
+from skimage.feature import match_descriptors
 from time import time
 
 from utils import *
@@ -41,8 +42,18 @@ def FeatMatch(opts):
             img_name1, kp1, desc1 = data[i]
             img_name2, kp2, desc2 = data[j]
 
-            matcher = getattr(cv2, opts['matcher'])(crossCheck=opts['cross_check'])
-            matches = matcher.match(desc1, desc2)
+            matches_tmp = match_descriptors(desc1, desc2, cross_check=True)
+            matches = []
+            for match in matches_tmp:
+                comp_dist = desc1[match[0], :].copy()
+                comp_dist = comp_dist - desc2[match[1], :]
+                comp_dist = np.square(comp_dist)
+                comp_dist = np.sum(comp_dist, axis=1)
+                distance = np.sqrt(comp_dist)
+                match_obj = cv2.DMatch(match[0], match[1], distance)
+                matches.append(match_obj)
+            #matcher = getattr(cv2, opts['matcher'])(crossCheck=opts['cross_check'])
+            #matches = matcher.match(desc1, desc2)
 
             matches = sorted(matches, key=lambda x: x.distance)
             match_dict[img_name1 + '_' + img_name2] = matches
