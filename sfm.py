@@ -127,7 +127,7 @@ class SFM(object):
         self.matches_data[(name1,name2)] = [matches, img1pts[mask], img2pts[mask], 
                                             img1idx[mask],img2idx[mask]]
 
-        '''pic_a = load_image(self.img_name_path[name1])
+        pic_a = load_image(self.img_name_path[name1])
         scale_a = 0.65
         pic_b = load_image(self.img_name_path[name1])
         scale_b = 0.65
@@ -141,7 +141,7 @@ class SFM(object):
         plt.figure()
         plt.imshow(match_image)
         plt.tight_layout()
-        plt.show()'''
+        plt.show()
 
         return R,t
 
@@ -454,8 +454,8 @@ if __name__=='__main__':
 
     curr_dir = os.getcwd()
     data_root = os.path.join(curr_dir, 'data')
-    image_root_dirs = os.listdir(data_root)
-    #image_root_dirs = ['fountain-P11']
+    #image_root_dirs = os.listdir(data_root)
+    image_root_dirs = ['fountain-P11']
     for dr in image_root_dirs:
         print("Running sfm for " + str(dr))
         opts.dataset = dr
