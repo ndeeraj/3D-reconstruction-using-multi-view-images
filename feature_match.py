@@ -21,7 +21,6 @@ def FeatMatch(opts):
 
         feat = cv2.SIFT_create()
         kp, desc = feat.detectAndCompute(img, None)
-        print(kp)
         data.append((img_name, kp, desc))
         # print(img_name)
         desc_dict[img_name] = [kp, desc]
