@@ -11,6 +11,7 @@ from tqdm import tqdm
 import scipy
 import scipy.io
 import scipy.misc
+from skimage.transform import resize
 
 from lib.model_test import D2Net
 from lib.utils import preprocess_image
@@ -92,15 +93,12 @@ for line in tqdm(lines, total=len(lines)):
     # TODO: switch to PIL.Image due to deprecation of scipy.misc.imresize.
     resized_image = image
     if max(resized_image.shape) > args.max_edge:
-        resized_image = scipy.misc.imresize(
-            resized_image,
-            args.max_edge / max(resized_image.shape)
-        ).astype('float')
+        resized_image = resize(resized_image,(round(resized_image.shape[0] * args.max_edge / max(resized_image.shape)),
+                                              round(resized_image.shape[1] * args.max_edge / max(resized_image.shape)))).astype('float')
+
     if sum(resized_image.shape[: 2]) > args.max_sum_edges:
-        resized_image = scipy.misc.imresize(
-            resized_image,
-            args.max_sum_edges / sum(resized_image.shape[: 2])
-        ).astype('float')
+        resized_image = resize(resized_image,(round(resized_image.shape[0] * args.max_sum_edges / sum(resized_image.shape[: 2])),
+                                              round(resized_image.shape[1] * args.max_sum_edges / sum(resized_image.shape[: 2])))).astype('float')
 
     fact_i = image.shape[0] / resized_image.shape[0]
     fact_j = image.shape[1] / resized_image.shape[1]
@@ -154,3 +152,4 @@ for line in tqdm(lines, total=len(lines)):
             )
     else:
         raise ValueError('Unknown output type.')
+
