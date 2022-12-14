@@ -16,9 +16,7 @@ def FeatMatch(opts):
     data = []
     t1 = time()
     for i, img_path in enumerate(img_paths):
-        #img = cv2.imread(img_path)
-        feat_path = img_path#+'.d2-net'
-        print(feat_path)
+        feat_path = img_path
 
         features = np.load(feat_path)
         keypoints = features["keypoints"][:,[0,1]]
@@ -31,13 +29,7 @@ def FeatMatch(opts):
         img_name = img_names[i].split('.')[0]
         #img = img[:, :, ::-1]
 
-        #feat = cv2.SIFT_create()
-        #kp, desc = feat.detectAndCompute(img, None)
-        #print(kp)
-        #print(desc.shape)
-
         data.append((img_name, kp, desc))
-        # print(img_name)
         desc_dict[img_name] = [kp, desc]
 
         t2 = time()

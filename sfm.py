@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 
 import utils
 from feature_match import FeatMatch
+from cnn_match import FeatMatch as CNNMatch
 
 from utils import * 
 
@@ -59,8 +60,11 @@ class SFM(object):
         self.image_data, self.matches_data, errors = {}, {}, {}
         self.matcher = getattr(cv2, opts.matcher)(crossCheck=opts.cross_check)
 
-        opts_feat = self._SetupFeatMatchOpts(self.images_dir)
-        self.desc_dict, self.match_dict = FeatMatch(opts_feat)
+        opts_feat = self._SetupFeatMatchOpts(self.images_dir, opts.ext, opts.features)
+        if opts.features == "SIFT":
+            self.desc_dict, self.match_dict = FeatMatch(opts_feat)
+        elif opts.features == "CNN":
+            self.desc_dict, self.match_dict = CNNMatch(opts_feat)
 
         if opts.calibration_mat == 'benchmark': 
             self.K = np.array([[2759.48,0,1520.69],[0,2764.16,1006.81],[0,0,1]])
@@ -69,8 +73,8 @@ class SFM(object):
         else: 
             raise NotImplementedError
 
-    def _SetupFeatMatchOpts(self, img_dir):
-        temp = {"data_dir": img_dir, 'ext': ['jpg', 'png'], 'features': 'SIFT', 'matcher': 'BFMatcher',
+    def _SetupFeatMatchOpts(self, img_dir, ext, features):
+        temp = {"data_dir": img_dir, 'ext': ext, 'features': features, 'matcher': 'BFMatcher',
                 'cross_check': True, 'print_every': 5, 'save_results': False}
         return temp
 
@@ -127,9 +131,11 @@ class SFM(object):
         self.matches_data[(name1,name2)] = [matches, img1pts[mask], img2pts[mask], 
                                             img1idx[mask],img2idx[mask]]
 
-        '''pic_a = load_image(self.img_name_path[name1])
+        '''#pic_a = load_image(self.img_name_path[name1])
+        pic_a = load_image('C:\\Users\\deera\\Documents\\cs5330\\project\\final\\data\\fountain-P11\\images\\0000.jpg')
         scale_a = 0.65
-        pic_b = load_image(self.img_name_path[name1])
+        pic_b = load_image('C:\\Users\\deera\\Documents\\cs5330\\project\\final\\data\\fountain-P11\\images\\0001.jpg')
+        #pic_b = load_image(self.img_name_path[name1])
         scale_b = 0.65
         n_feat = 5e4
 
@@ -421,7 +427,6 @@ def SetArguments(parser):
 def PostprocessArgs(opts): 
     opts.fund_method = getattr(cv2,opts.fund_method)
     opts.ext = opts.ext.split(',')
-
 
 if __name__=='__main__': 
     parser = argparse.ArgumentParser()

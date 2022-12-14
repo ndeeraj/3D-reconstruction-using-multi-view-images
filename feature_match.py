@@ -7,8 +7,8 @@ from utils import *
 
 def FeatMatch(opts):
     desc_dict = {}
-
-    img_names = sorted(os.listdir(opts['data_dir']))
+    img_names = sorted([x for x in os.listdir(opts['data_dir']) if \
+                        x.split('.')[-1] in opts['ext']])
     img_paths = [os.path.join(opts['data_dir'], x) for x in img_names if \
                  x.split('.')[-1] in opts['ext']]
 
@@ -61,6 +61,7 @@ if __name__ == '__main__':
     curr_dir = os.getcwd()
     data_root = os.path.join(curr_dir, 'data')
     image_root_dirs = os.listdir(data_root)
+    image_root_dirs = ['fountain-P11']
     image_dir = []
     for img_rt_dir in image_root_dirs:
         pth = os.path.join(data_root, img_rt_dir, 'images')
