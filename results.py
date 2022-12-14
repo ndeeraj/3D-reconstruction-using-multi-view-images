@@ -10,16 +10,19 @@ def main(dataset):
     pth = os.path.join(res_root, dataset, 'point-clouds')
 
     point_f_names = sorted(os.listdir(pth))
+
     cld_pts = []
     point_f_paths = [os.path.join(pth, x) for x in point_f_names if \
                      x.split('.')[-1] in ['ply']]
+    point_f_paths = point_f_paths[-1]
+    print(point_f_paths)
+    #for pts_file in point_f_paths:
+        #cloud = io.read_point_cloud(pts_file)
+        #cld_pts.append(cloud)
 
-    for pts_file in point_f_paths:
-        cloud = io.read_point_cloud(pts_file)
-        cld_pts.append(cloud)
-
-    visualization.draw_geometries(cld_pts)  # Visualize the point cloud
-
+    #visualization.draw_geometries(cld_pts)  # Visualize the point cloud
+    cloud = io.read_point_cloud(point_f_paths)
+    visualization.draw_geometries([cloud])
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

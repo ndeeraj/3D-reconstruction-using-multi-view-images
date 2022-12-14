@@ -58,10 +58,6 @@ def FeatMatch(opts):
 
 
 if __name__ == '__main__':
-    # parser = argparse.ArgumentParser()
-    # SetArguments(parser)
-    # opts = parser.parse_args()
-    # PostprocessArgs(opts)
     curr_dir = os.getcwd()
     data_root = os.path.join(curr_dir, 'data')
     image_root_dirs = os.listdir(data_root)
@@ -70,6 +66,7 @@ if __name__ == '__main__':
         pth = os.path.join(data_root, img_rt_dir, 'images')
         image_dir.append(pth)
     for i, dt in enumerate(image_dir):
+        # defaults for demo purposes
         opts = {"data_dir": dt, 'ext': ['jpg', 'png'],
                 'features': 'SIFT', 'matcher': 'BFMatcher', 'cross_check': True, 'print_every': 1,
                 'save_results': False}
