@@ -1,28 +1,41 @@
 import cv2
 import os
-from skimage.feature import match_descriptors
 from time import time
-
+from skimage.feature import match_descriptors
 from utils import *
 
 
 def FeatMatch(opts):
     desc_dict = {}
 
-    img_names = sorted(os.listdir(opts['data_dir']))
+    img_names = sorted([x for x in os.listdir(opts['data_dir']) if \
+                        x.split('.')[-1] in opts['ext']])
     img_paths = [os.path.join(opts['data_dir'], x) for x in img_names if \
                  x.split('.')[-1] in opts['ext']]
 
     data = []
     t1 = time()
     for i, img_path in enumerate(img_paths):
-        img = cv2.imread(img_path)
-        img_name = img_names[i].split('.')[0]
-        img = img[:, :, ::-1]
+        #img = cv2.imread(img_path)
+        feat_path = img_path#+'.d2-net'
+        print(feat_path)
 
-        feat = cv2.SIFT_create()
-        kp, desc = feat.detectAndCompute(img, None)
-        print(kp)
+        features = np.load(feat_path)
+        keypoints = features["keypoints"][:,[0,1]]
+        kp = []
+        for d1 in range(keypoints.shape[0]):
+            knt = cv2.KeyPoint(keypoints[d1,0],keypoints[d1,1],size= 16)
+            kp.append(knt)
+
+        desc = features["descriptors"]
+        img_name = img_names[i].split('.')[0]
+        #img = img[:, :, ::-1]
+
+        #feat = cv2.SIFT_create()
+        #kp, desc = feat.detectAndCompute(img, None)
+        #print(kp)
+        #print(desc.shape)
+
         data.append((img_name, kp, desc))
         # print(img_name)
         desc_dict[img_name] = [kp, desc]
@@ -48,7 +61,8 @@ def FeatMatch(opts):
                 comp_dist = desc1[match[0], :].copy()
                 comp_dist = comp_dist - desc2[match[1], :]
                 comp_dist = np.square(comp_dist)
-                comp_dist = np.sum(comp_dist, axis=1)
+                #print(comp_dist.shape)
+                comp_dist = np.sum(comp_dist)
                 distance = np.sqrt(comp_dist)
                 match_obj = cv2.DMatch(match[0], match[1], distance)
                 matches.append(match_obj)
@@ -65,7 +79,8 @@ def FeatMatch(opts):
                     'MATCHES DONE: {0}/{1} [time={2:.2f}s]'.format(num_done, num_matches, t2 - t1))
 
             t1 = time()
-
+    #print(desc_dict.keys())
+    #print(match_dict.keys())
     return desc_dict, match_dict
 
 
@@ -76,13 +91,16 @@ if __name__ == '__main__':
     # PostprocessArgs(opts)
     curr_dir = os.getcwd()
     data_root = os.path.join(curr_dir, 'data')
+
     image_root_dirs = os.listdir(data_root)
+    image_root_dirs = ["fountain-P11","castle-P19","castle-P30","entry-P10","Herz-Jesus-P8","Herz-Jesus-P25"]
     image_dir = []
     for img_rt_dir in image_root_dirs:
         pth = os.path.join(data_root, img_rt_dir, 'images')
         image_dir.append(pth)
     for i, dt in enumerate(image_dir):
-        opts = {"data_dir": dt, 'ext': ['jpg', 'png'],
+        opts = {"data_dir": dt, 'ext': ['d2-net'],
                 'features': 'SIFT', 'matcher': 'BFMatcher', 'cross_check': True, 'print_every': 1,
                 'save_results': False}
         FeatMatch(opts)
+
