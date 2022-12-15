@@ -15,7 +15,7 @@ Setup for D2-Net
 
 - We have changed the files in D2-Net according to our use case and solved the deprecation errors, so no additional setup for D2-Net is required.
 - For our pipeline to work we need d2-net files which contain the features extracted for each image to be in the data directory, for instance, `[project root]/data/fountain-P11/images/`
-- If you do not find them, for each image you can generate them by going in to the d2-net directory in command-line and running the following command  `python extract_features.py --image_list_file images_feature_extract.txt`
+- If you do not find them, for each image you can generate them by going in to the d2-net directory in command-line and running the following command  `python extract_features.py --image_list_file images_feature_extract.txt`. NOTE: The text file assumes that you have the full dataset downloaded in the `[project root]/data` directory, If this is not the case, edit the file to include a particular dataset.
 
 Data setup
 ----------
@@ -32,6 +32,14 @@ Running SfM using SIFT features
 - To run the demo on "fountain-P11", execute `python sfm.py --demo --features SIFT`
 - To run for the entire dataset, execute `python sfm.py --no-demo --features SIFT`
 - The point cloud `.ply` file will be generated in [project-root]/results/SIFT/[dataset name]/point-clouds
+
+Running SfM using CNN features
+-------------------------------
+
+- run `python sfm.py -h` for help on the options.
+- To run the demo on "fountain-P11", execute `python sfm.py --demo --features CNN --ext d2-net`
+- To run for the entire dataset, execute `python sfm.py --no-demo --features CNN --ext d2-net`
+- The point cloud `.ply` file will be generated in [project-root]/results/CNN/[dataset name]/point-clouds
 
 Visualizing point clouds
 ------------------------
