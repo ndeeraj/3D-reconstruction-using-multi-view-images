@@ -22,7 +22,6 @@ def FeatMatch(opts):
         feat = cv2.SIFT_create()
         kp, desc = feat.detectAndCompute(img, None)
         data.append((img_name, kp, desc))
-        # print(img_name)
         desc_dict[img_name] = [kp, desc]
 
         t2 = time()
@@ -61,7 +60,6 @@ if __name__ == '__main__':
     curr_dir = os.getcwd()
     data_root = os.path.join(curr_dir, 'data')
     image_root_dirs = os.listdir(data_root)
-    image_root_dirs = ['fountain-P11']
     image_dir = []
     for img_rt_dir in image_root_dirs:
         pth = os.path.join(data_root, img_rt_dir, 'images')

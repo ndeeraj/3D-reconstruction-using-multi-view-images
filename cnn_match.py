@@ -21,13 +21,13 @@ def FeatMatch(opts):
         features = np.load(feat_path)
         keypoints = features["keypoints"][:,[0,1]]
         kp = []
+        # need to convert keypoints from d2-net to cv2 keypoints
         for d1 in range(keypoints.shape[0]):
             knt = cv2.KeyPoint(keypoints[d1,0],keypoints[d1,1],size= 16)
             kp.append(knt)
 
         desc = features["descriptors"]
         img_name = img_names[i].split('.')[0]
-        #img = img[:, :, ::-1]
 
         data.append((img_name, kp, desc))
         desc_dict[img_name] = [kp, desc]
@@ -49,17 +49,17 @@ def FeatMatch(opts):
 
             matches_tmp = match_descriptors(desc1, desc2, cross_check=True)
             matches = []
+            # need to created cv2 match objects for matches from d2-net
             for match in matches_tmp:
+                # sum of squared distance is computed as rge distance measure since
+                # cv2 match object need them.
                 comp_dist = desc1[match[0], :].copy()
                 comp_dist = comp_dist - desc2[match[1], :]
                 comp_dist = np.square(comp_dist)
-                #print(comp_dist.shape)
                 comp_dist = np.sum(comp_dist)
                 distance = np.sqrt(comp_dist)
                 match_obj = cv2.DMatch(match[0], match[1], distance)
                 matches.append(match_obj)
-            #matcher = getattr(cv2, opts['matcher'])(crossCheck=opts['cross_check'])
-            #matches = matcher.match(desc1, desc2)
 
             matches = sorted(matches, key=lambda x: x.distance)
             match_dict[img_name1 + '_' + img_name2] = matches
@@ -71,28 +71,22 @@ def FeatMatch(opts):
                     'MATCHES DONE: {0}/{1} [time={2:.2f}s]'.format(num_done, num_matches, t2 - t1))
 
             t1 = time()
-    #print(desc_dict.keys())
-    #print(match_dict.keys())
     return desc_dict, match_dict
 
 
 if __name__ == '__main__':
-    # parser = argparse.ArgumentParser()
-    # SetArguments(parser)
-    # opts = parser.parse_args()
-    # PostprocessArgs(opts)
     curr_dir = os.getcwd()
     data_root = os.path.join(curr_dir, 'data')
 
     image_root_dirs = os.listdir(data_root)
-    image_root_dirs = ["fountain-P11","castle-P19","castle-P30","entry-P10","Herz-Jesus-P8","Herz-Jesus-P25"]
     image_dir = []
     for img_rt_dir in image_root_dirs:
         pth = os.path.join(data_root, img_rt_dir, 'images')
         image_dir.append(pth)
     for i, dt in enumerate(image_dir):
+        # defaults for demo
         opts = {"data_dir": dt, 'ext': ['d2-net'],
-                'features': 'SIFT', 'matcher': 'BFMatcher', 'cross_check': True, 'print_every': 1,
+                'features': 'CNN', 'matcher': 'BFMatcher', 'cross_check': True, 'print_every': 1,
                 'save_results': False}
         FeatMatch(opts)
 

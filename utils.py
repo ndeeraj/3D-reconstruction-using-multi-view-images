@@ -1,8 +1,5 @@
 import numpy as np 
-import cv2 
-import pdb
-#from itertools import zip
-
+import cv2
 
 def GetAlignedMatches(kp1,desc1,kp2,desc2,matches):
     """Aligns the keypoints so that a row of first keypoints corresponds to the same row 
@@ -54,7 +51,6 @@ def pts2ply(pts,colors,filename='out.ply'):
         
         f.write('end_header\n')
         
-        #pdb.set_trace()
         colors = colors.astype(int)
         for pt, cl in zip(pts,colors):
             f.write('{} {} {} {} {} {}\n'.format(pt[0],pt[1],pt[2],
@@ -91,7 +87,7 @@ def DrawCorrespondences(img, ptsTrue, ptsReproj, ax, drawOnly=50):
 
     return ax
 
-# from PA5
+# from PA5 assignment - cs 5330
 
 def hstack_images(imgA: np.ndarray, imgB: np.ndarray) -> np.ndarray:
     """Stacks 2 images side-by-side

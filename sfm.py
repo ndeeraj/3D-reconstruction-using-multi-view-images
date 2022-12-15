@@ -1,12 +1,10 @@
 import numpy as np 
 import cv2 
 import argparse
-import pickle
-import os 
+import os
 from time import time
 import matplotlib.pyplot as plt
 
-import utils
 from feature_match import FeatMatch
 from cnn_match import FeatMatch as CNNMatch
 
@@ -103,21 +101,6 @@ class SFM(object):
         img1pts, img2pts, img1idx, img2idx = self._GetAlignedMatches(kp1,desc1,kp2,
                                                                     desc2,matches)
 
-        '''pic_a = load_image(self.img_name_path[name1])
-        scale_a = 0.65
-        pic_b = load_image(self.img_name_path[name1])
-        scale_b = 0.65
-        n_feat = 5e4
-
-        pic_a = cv2.resize(pic_a, None, fx=scale_a, fy=scale_a)
-        pic_b = cv2.resize(pic_b, None, fx=scale_b, fy=scale_b)
-
-        match_image = utils.show_correspondence2(pic_a, pic_b, img1pts[:, 0], img1pts[:, 1], img2pts[:, 0], img2pts[:, 1])
-        plt.figure()
-        plt.imshow(match_image)
-        plt.tight_layout()
-        plt.show()
-        '''
         F,mask = cv2.findFundamentalMat(img1pts,img2pts,method=opts.fund_method,
                                         ransacReprojThreshold=opts.outlier_thres, confidence = opts.fund_prob)
         mask = mask.astype(bool).flatten()
@@ -131,6 +114,7 @@ class SFM(object):
         self.matches_data[(name1,name2)] = [matches, img1pts[mask], img2pts[mask], 
                                             img1idx[mask],img2idx[mask]]
 
+        # uncomment to see correspondences after fundamendal matrix estimation
         '''#pic_a = load_image(self.img_name_path[name1])
         pic_a = load_image('C:\\Users\\deera\\Documents\\cs5330\\project\\final\\data\\fountain-P11\\images\\0000.jpg')
         scale_a = 0.65
