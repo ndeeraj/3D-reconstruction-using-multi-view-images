@@ -23,4 +23,20 @@ Make sure that there are no other sub folders in the data directory.
 
 In this repository, we have just submitted fountain-P11 dataset for demo purposes. the sfm script
 
+Running SfM using SIFT features
+-------------------------------
+
+- run `python sfm.py -h` for help on the options.
+- To run the demo on "fountain-P11", execute `python sfm.py --demo --features SIFT`
+- To run for the entire dataset, execute `python sfm.py --no-demo --features SIFT`
+- The point cloud `.ply` file will be generated in [project-root]/results/SIFT/[dataset name]/point-clouds
+
+Visualizing point clouds
+------------------------
+
+- If you installed open3D, you can use the results script as  `python results.py [SIFT|CNN] [dataset name]` like `python results.py SIFT fountain-P11`. The script expects the `.ply` files to be in [project-root]/results/SIFT/fountain-P11
+- You can also load up the highest numbered `.ply` file in MeshLab to visualize.
+- In either method, you would need to zoom and rotate the points to see the reconstructions clearly.
+- The results we obtained for few dataset are in `results\cloud_point_visualization`
+
 
