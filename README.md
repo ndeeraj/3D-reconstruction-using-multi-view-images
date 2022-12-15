@@ -42,3 +42,7 @@ Visualizing point clouds
 - The results we obtained for few dataset are in `results\cloud_point_visualization`
 
 
+Evaluating the results obtained
+------------------------
+
+- The results obtained from both the methods are evaluated with COLMAP as the baseline and it can be seen in the Evaluation_metric and results.ipynb it requires pytorch3D
