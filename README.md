@@ -13,7 +13,9 @@ Setup for SfM pipeline
 Setup for D2-Net
 ----------
 
-We have changed the files in D2-Net according to our use case and solved the deprecation error, so no additional setup for D2-Net is required
+We have changed the files in D2-Net according to our use case and solved the deprecation errors, so no additional setup for D2-Net is required.
+For our pipeline to work we need d2-net files which contain the features extracted for each image to be in the data directory, for instance, `[project root]/data/fountain-P11/images/`.
+If you do not find them, for each image you can generate the file by 
 
 Data setup
 ----------
