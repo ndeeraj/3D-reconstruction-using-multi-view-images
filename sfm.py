@@ -32,9 +32,9 @@ class SFM(object):
 
         #setting up directory stuff..
         self.images_dir = os.path.join(opts.data_dir,opts.dataset, 'images')
-        self.out_cloud_dir = os.path.join(opts.out_dir, opts.dataset, 'point-clouds')
-        self.out_npz_dir = os.path.join(opts.out_dir, opts.dataset, 'npz-point-clouds')
-        self.out_err_dir = os.path.join(opts.out_dir, opts.dataset, 'errors')
+        self.out_cloud_dir = os.path.join(opts.out_dir, opts.features, opts.dataset, 'point-clouds')
+        self.out_npz_dir = os.path.join(opts.out_dir, opts.features, opts.dataset, 'npz-point-clouds')
+        self.out_err_dir = os.path.join(opts.out_dir, opts.features, opts.dataset, 'errors')
 
         #output directories
         if not os.path.exists(self.out_cloud_dir): 
