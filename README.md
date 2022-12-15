@@ -13,7 +13,7 @@ Setup for SfM pipeline
 Setup for D2-Net
 ----------
 
-[should be nothing right?]
+We have changed the files in D2-Net according to our use case and solved the deprecation error, so no additional setup for D2-Net is required
 
 Data setup
 ----------
